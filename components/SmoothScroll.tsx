@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-interface Props {
-  children: React.ReactNode;
+interface LenisInstance {
+  raf: (time: number) => void;
+  destroy: () => void;
 }
 
-export default function SmoothScroll({ children }: Props) {
-  const lenisRef = useRef<{ destroy: () => void; raf: (t: number) => void } | null>(null);
+export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const lenisRef = useRef<LenisInstance | null>(null);
 
   useEffect(() => {
     let rafId: number;
@@ -18,12 +19,12 @@ export default function SmoothScroll({ children }: Props) {
           duration: 1.2,
           easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         });
-        lenisRef.current = lenis as unknown as { destroy: () => void; raf: (t: number) => void };
+        lenisRef.current = lenis as unknown as LenisInstance;
 
-        function animate(time: number) {
+        const animate = (time: number) => {
           lenis.raf(time);
           rafId = requestAnimationFrame(animate);
-        }
+        };
         rafId = requestAnimationFrame(animate);
       } catch {
         // Lenis unavailable — native scroll handles it gracefully

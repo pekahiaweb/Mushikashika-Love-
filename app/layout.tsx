@@ -12,7 +12,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Mushikashika Love — A Film by Andrew Pekahia",
   description:
-    "A South African woman arrives in Harare to meet her online boyfriend, only to find he's a ruthless crime boss. Stranded and robbed, she's rescued by a struggling taxi driver who helps her take him down. A Zimbabwean romantic thriller set in Harare.",
+    "A South African woman arrives in Harare to meet her online boyfriend, only to find he's a ruthless crime boss. Stranded and robbed, she's rescued by a struggling taxi driver who helps her take him down. A Zimbabwean romantic thriller.",
   keywords: [
     "Zimbabwe",
     "Harare",
@@ -36,17 +36,12 @@ export const metadata: Metadata = {
     title: "Mushikashika Love",
     description: "Harare has teeth. But it also has a heart.",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={poppins.variable}>
       <body className="bg-midnight text-cream overflow-x-hidden antialiased">

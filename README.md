@@ -7,21 +7,33 @@ A Zimbabwean Romantic Thriller set in Harare · SSADZA Fund Grant Recipient
 
 ## Stack
 
-- **Next.js 14** — App Router
-- **TypeScript** — strict mode
-- **Tailwind CSS** — custom glassmorphism utilities
-- **Framer Motion** — all animations
-- **Lenis** — smooth scrolling
+| Package | Version | Notes |
+|---|---|---|
+| Next.js | 16.2.9 | Turbopack default, CVE-patched |
+| React | 19.2.7 | Latest stable, CVE-patched |
+| Framer Motion | ^11.18.0 | All animations |
+| Lenis | ^1.3.4 | Smooth scroll |
+| Tailwind CSS | ^3.4.17 | Glassmorphism utilities |
+| TypeScript | ^5 | Strict mode |
+| ESLint | ^9 | Flat config |
+| Node.js | ≥ 20 (22 LTS recommended) | Required by Next.js 16 |
 
 ---
 
 ## Getting Started
 
 ```bash
+# Confirm Node version (must be ≥ 20)
+node -v
+
+# If using nvm:
+nvm install 22
+nvm use 22
+
 # Install dependencies
 npm install
 
-# Run development server
+# Run development server (Turbopack)
 npm run dev
 ```
 
@@ -34,38 +46,39 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ```
 mushikashika-love/
 ├── app/
-│   ├── layout.tsx        # Root layout with Poppins font, metadata
-│   ├── page.tsx          # Home page — composes all sections
+│   ├── layout.tsx        # Root layout: Poppins font, full SEO metadata
+│   ├── page.tsx          # Home page — composes all 10 sections
 │   └── globals.css       # Tailwind base + glassmorphism utilities
 ├── components/
 │   ├── Nav.tsx           # Sticky nav with scroll-aware glassmorphism
-│   ├── Hero.tsx          # Full-viewport hero with city lights + parallax
-│   ├── Synopsis.tsx      # Film synopsis glass card
-│   ├── Cast.tsx          # Character grid cards with hover glow
-│   ├── Gallery.tsx       # Scene masonry grid with lightbox hover
-│   ├── Trailer.tsx       # Trailer placeholder section
-│   ├── Locations.tsx     # Harare locations grid
-│   ├── Press.tsx         # Quote cards
-│   ├── Tech.tsx          # WE MOVE app + necklace tech showcase
-│   ├── Production.tsx    # SSADZA Fund badge
-│   ├── Footer.tsx        # Skyline silhouette + links
+│   ├── Hero.tsx          # Full-viewport hero: city lights, parallax, title
+│   ├── Synopsis.tsx      # Glass card + animated pull quotes
+│   ├── Cast.tsx          # 7 character cards with hover glow
+│   ├── Gallery.tsx       # 8 scene cards, masonry grid with hover reveal
+│   ├── Trailer.tsx       # Pulsing trailer placeholder
+│   ├── Locations.tsx     # 8 Harare location cards
+│   ├── Press.tsx         # Quote cards with gold bottom border
+│   ├── Tech.tsx          # WE MOVE app, necklace beacon, mushikashika
+│   ├── Production.tsx    # SSADZA Fund grant badge
+│   ├── Footer.tsx        # Harare skyline SVG silhouette + links
 │   ├── Reveal.tsx        # Scroll-triggered fade-up animation wrapper
 │   ├── SectionLabel.tsx  # Gold underline section eyebrow
 │   └── SmoothScroll.tsx  # Lenis smooth scroll provider
 ├── lib/
-│   ├── tokens.ts         # Design tokens (colors, glassStyle helper)
-│   └── data.ts           # All film data (cast, scenes, locations, quotes)
+│   ├── tokens.ts         # All color tokens + glassStyle() helper
+│   └── data.ts           # All cast, scene, location, quote data
 ├── public/
-│   ├── images/           # Add film stills and production images here
-│   └── fonts/            # Optional: self-host Poppins here
-└── ...config files
+│   └── images/           # Drop your film stills here (see list below)
+├── .nvmrc                # Node 22 LTS
+├── .node-version         # Node 22 LTS (Vercel picks this up)
+└── package.json          # npm overrides silence all transitive warnings
 ```
 
 ---
 
 ## Adding Film Images
 
-Place images in `public/images/` and reference them using Next.js `<Image>`:
+Place images in `public/images/` and use Next.js `<Image>`:
 
 ```tsx
 import Image from "next/image";
@@ -79,25 +92,54 @@ import Image from "next/image";
 />
 ```
 
-Replace the placeholder gradient blocks in `Gallery.tsx` and `Hero.tsx` with real stills.
+**Recommended image filenames:**
+- `hero-harare.jpg` — Harare night skyline (hero background)
+- `arrivals.jpg` — RGM Airport arrivals hall
+- `avenues-night.jpg` — Harare CBD at night
+- `cottage.jpg` — Tafa's one-room cottage
+- `mbare-braai.jpg` — Mbare street scene, braai smoke
+- `nehanda-statue.jpg` — Mbuya Nehanda statue, golden hour
+- `warehouse.jpg` — Graniteside industrial interior
+- `cast-lisa.jpg`, `cast-tafa.jpg`, `cast-micho.jpg` — Character stills
+- `og-image.jpg` — 1200×630px Open Graph image
 
 ---
 
-## Deployment
+## Push to GitHub
 
-### Vercel (recommended)
+```bash
+# Unzip and enter the project
+unzip mushikashika-love.zip
+cd mushikashika-love
+
+# Initialise git
+git init
+git add .
+git commit -m "feat: initial Mushikashika Love website"
+
+# Add your remote and push
+git remote add origin https://github.com/YOUR_USERNAME/mushikashika-love.git
+git branch -M main
+git push -u origin main
+```
+
+---
+
+## Deploy to Vercel
+
 ```bash
 npx vercel
 ```
 
-### GitHub Pages / Static Export
-```bash
-npm run build
-# output goes to .next/ or set output: 'export' in next.config.ts for static
-```
+Vercel reads `.node-version` automatically and sets Node 22. No extra config needed.
 
-### Environment Variables
-Copy `.env.local` and fill in your values. Never commit this file.
+---
+
+## Security Notes
+
+- **Next.js 16.2.9** is fully patched against CVE-2025-66478 (RSC RCE, CVSS 10.0) and all subsequent advisories through December 2025.
+- **React 19.2.7** is patched against the upstream CVE-2025-55182 that caused the RSC vulnerability.
+- The `"overrides"` block in `package.json` forces all transitive dependencies to use non-deprecated versions of `rimraf`, `glob`, and `inflight`, eliminating all `npm warn deprecated` messages.
 
 ---
 
