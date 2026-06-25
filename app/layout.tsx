@@ -10,7 +10,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Mushikashika Love — A Film by Andrew Pekahia",
+  title: "Mushikashika Love — A Film by Andrew Pekahia Muroyiwa",
   description:
     "A South African woman arrives in Harare to meet her online boyfriend, only to find he's a ruthless crime boss. Stranded and robbed, she's rescued by a struggling taxi driver who helps her take him down. A Zimbabwean romantic thriller.",
   keywords: [
