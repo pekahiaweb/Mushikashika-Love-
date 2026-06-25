@@ -5,38 +5,34 @@ interface Props {
   children: React.ReactNode;
 }
 
-// Lenis smooth scroll wrapper — degrades gracefully if Lenis fails to import
 export default function SmoothScroll({ children }: Props) {
-  const lenisRef = useRef<unknown>(null);
+  const lenisRef = useRef<{ destroy: () => void; raf: (t: number) => void } | null>(null);
 
   useEffect(() => {
-    let raf: number;
+    let rafId: number;
 
     (async () => {
       try {
-        const LenisModule = await import("lenis");
-        const Lenis = LenisModule.default;
+        const { default: Lenis } = await import("lenis");
         const lenis = new Lenis({
           duration: 1.2,
           easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         });
-        lenisRef.current = lenis;
+        lenisRef.current = lenis as unknown as { destroy: () => void; raf: (t: number) => void };
 
         function animate(time: number) {
-          (lenis as { raf: (t: number) => void }).raf(time);
-          raf = requestAnimationFrame(animate);
+          lenis.raf(time);
+          rafId = requestAnimationFrame(animate);
         }
-        raf = requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       } catch {
-        // Lenis unavailable — native scroll handles it
+        // Lenis unavailable — native scroll handles it gracefully
       }
     })();
 
     return () => {
-      cancelAnimationFrame(raf);
-      if (lenisRef.current) {
-        (lenisRef.current as { destroy: () => void }).destroy();
-      }
+      cancelAnimationFrame(rafId);
+      lenisRef.current?.destroy();
     };
   }, []);
 
